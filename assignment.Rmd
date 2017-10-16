@@ -311,7 +311,7 @@ print(acc_confmat_train_rpart_none)
 ```
 
 <br>
-So when cross-validation is introduced while generating the decision tree using train(), the overall accuracy becomes 73.4% (ranging between 72.3-74.5% at 95% confidence), which is in agreement with the 70.2-72.6% range for the rpart() predictions. 
+So when cross-validation is introduced while generating the decision tree using train(), the overall accuracy becomes 73.8% (ranging between 72.3-74.5% at 95% confidence), which is in agreement with the 70.2-72.6% range for the rpart() predictions. 
 
 This level of accuracy still leaves a lot to be desired, so more complex models are now investigated.
 
@@ -336,7 +336,7 @@ confmat_train_gbm
 ```
 
 <br>
-Thus in this instance the overall accuracy of the model is 96.9% (ranging between 96.5-97.4% at 95% confidence). This is a major improvement over the 69% accuracy of the simple decision tree model and the sensitivity and specificity for individual outcome levels has a far smaller range.
+Thus in this instance the overall accuracy of the model is 96.8% (ranging between 96.3-97.2% at 95% confidence). This is a major improvement over the 69% accuracy of the simple decision tree model and the sensitivity and specificity for individual outcome levels has a far smaller range.
 
 ---
 
@@ -357,7 +357,7 @@ confmat_train_bag <- confusionMatrix(pred_train_bag, testing_subset$classe)
 confmat_train_bag
 ```
 
-Thus, with a 99.8% overall accuracy (between 99.6-99.9% at 95% confidence), the bagging approach offers a small improvement over the 97% achieved via boosting. There is also an improvement in sensitivity and specificity for each individual outcome level compared to boosting, with tiny (<1%) differences between them.
+Thus, with a 99.5% overall accuracy (between 99.3-99.7% at 95% confidence), the bagging approach offers a small improvement over the 97% achieved via boosting. There is also an improvement in sensitivity and specificity for each individual outcome level compared to boosting, with tiny (<1%) differences between them.
 
 ---
 
@@ -380,14 +380,14 @@ confmat_train_rf <- confusionMatrix(pred_train_rf, testing_subset$classe)
 confmat_train_rf
 ```
 
-The random forest approach results in an overall accuracy of 99.8% (ranging between 99.7-99.9% at 95% confidence). This matches the accuracy of the bagging model and there is very little to distinguish this model from bagging in terms of individual specificities or sensitivities. 
+The random forest approach results in an overall accuracy of 99.86% (ranging between 99.7-99.9% at 95% confidence). This matches the accuracy of the bagging model and there is very little to distinguish this model from bagging in terms of individual specificities or sensitivities. 
 
 ---
 
 ## Summary of model accuracies
 
 The overall accuracy and out-of-sample error estimate for each of the four models tested are displayed as follows:
-```{r model summary table, cache = TRUE, error = TRUE}
+```{r model summary table, cache = FALSE, error = TRUE}
 acc_rpart <- as.numeric(round(100 * confmat_rpart$overall[1], 1))
 acc_train_rpart_none <- as.numeric(round(100 * confmat_train_rpart_none$overall[1], 1))
 acc_train_gbm <- as.numeric(round(100 * confmat_train_gbm$overall[1], 1))
@@ -443,7 +443,9 @@ for(i in 1:5){
                    col = colours[i], add = which_add[i], print.auc.y = 0.1 * i, lty = line_types[i])
 }
 ```
+The black, red, green, orange and blue lines correspond to the models in the reverse order that they appear in the summary table above.
 
+<br>
 Plots of sensitivity vs. specificity for each possible level for of each of the classification models (aside from the decision tree built using train(..., method = "rpart")) are now generated as follows: 
 ```{r sensitiv}
 lvls <- as.character(levels(testing_subset$classe))
@@ -484,4 +486,4 @@ prediction_table <- as.table(prediction_table)
 prediction_table
 ```
 
-The boosting, bagging and random forest models all make identical predictions. The simple decision trees make some different predictions but they are far less accurate models than the other three.
+The boosting, bagging and random forest models all make identical predictions. The simple decision trees make some different predictions but they are far less accurate models than the latter three; the predictions made by those three will be the answers used for the quiz.
